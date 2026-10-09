@@ -73,7 +73,7 @@ python3 tools/build_timeline.py            # 依据真实配音时长生成时�
 python3 tools/make_subs.py                 # SRT + ASS
 .venv/bin/python tools/make_audio.py       # 配乐 + 音效 + 配音混音 → build/mix.wav、output/voiceover.wav
 node render/render.mjs --workers 3         # 逐帧渲染（可中断后重跑，已完成的分段会跳过）
-python3 tools/mux.py --crf 23              # 合成 output/wuxu_reform.mp4
+python3 tools/mux.py --bitrate 2250k --maxrate 6M   # 两遍编码合成 output/wuxu_reform.mp4（约 93 MB，低于 GitHub 单文件 100 MB 上限）
 python3 tools/export_narration.py          # output/narration.txt
 ```
 

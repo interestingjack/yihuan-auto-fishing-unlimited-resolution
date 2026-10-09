@@ -16,6 +16,7 @@ import os
 import wave
 
 import numpy as np
+from scipy.ndimage import minimum_filter1d, uniform_filter1d
 from scipy.signal import fftconvolve, butter, sosfilt
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -447,6 +448,15 @@ def main():
         duck = 1 - 0.72 * np.clip(gate, 0, 1)
         m *= duck[:, None]
         fx *= (1 - 0.55 * np.clip(gate, 0, 1))[:, None]
+        # sidechain limiter: loud transients (cannon, taiko, gong) stay >= ~9 dB under the narration
+        def env(x, sec):
+            return np.sqrt(uniform_filter1d(x ** 2, max(1, int(sec * SR))) + 1e-12)
+        eb = env((m + fx).mean(axis=1), 0.03)
+        ev = env(voice[:, 0], 0.4)
+        g = np.where(gate > 0.5, np.minimum(1.0, ev * 10 ** (-9 / 20) / eb), 1.0)
+        g = uniform_filter1d(minimum_filter1d(g, int(0.08 * SR)), int(0.06 * SR))
+        m *= g[:, None]
+        fx *= g[:, None]
 
     mix = m + fx + voice
     peak = np.max(np.abs(mix))
