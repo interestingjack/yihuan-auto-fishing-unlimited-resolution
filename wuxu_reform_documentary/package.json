@@ -1,0 +1,20 @@
+{
+  "name": "wuxu-reform-documentary",
+  "version": "1.0.0",
+  "private": true,
+  "description": "《戊戌变法——改变中国的103天》程序化历史纪录短片",
+  "type": "module",
+  "scripts": {
+    "assets": "node tools/prepare_assets.mjs",
+    "render": "node render/render.mjs"
+  },
+  "dependencies": {
+    "d3-geo": "^3.1.1",
+    "echarts": "^4.9.0",
+    "hanzi-writer-data": "^2.0.1",
+    "playwright-core": "^1.56.1",
+    "three": "^0.160.0",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2"
+  }
+}
