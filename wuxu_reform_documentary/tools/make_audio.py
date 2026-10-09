@@ -353,8 +353,8 @@ def main():
     c7 = ch[7]
     s25 = sc("S25")
     hit = s25["start"] + cue("S25", 0)["start"]
-    music.add(hit - 0.05, taiko(3.0, 85, 36, 0.3), 1.0)
-    music.add(hit, gong(70, 9), 1.0)
+    music.add(hit - 0.35, taiko(3.0, 85, 36, 0.3), 0.8)
+    music.add(hit - 0.3, gong(70, 9), 0.7)
     music.add(hit + 2.0, pad(chord_tones("D2 A2 D3 F3"), 6, a=3, r=3, bright=2.8), 0.45)
     lament = ["A3 1.5", "D4 1.0", "F4 1.0", "E4 2.0", "D4 1.0", "C4 1.0", "A3 2.5", "G3 1.0", "A3 1.0", "C4 1.0", "D4 3.0"]
     t = hit + 3.0
@@ -444,9 +444,9 @@ def main():
         gate = (act > 0.003).astype(float)
         sm = int(0.35 * SR)
         gate = np.convolve(gate, np.ones(sm) / sm, mode="same")
-        duck = 1 - 0.55 * np.clip(gate, 0, 1)
+        duck = 1 - 0.72 * np.clip(gate, 0, 1)
         m *= duck[:, None]
-        fx *= (1 - 0.3 * np.clip(gate, 0, 1))[:, None]
+        fx *= (1 - 0.55 * np.clip(gate, 0, 1))[:, None]
 
     mix = m + fx + voice
     peak = np.max(np.abs(mix))
@@ -457,7 +457,7 @@ def main():
     write_wav(os.path.join(ROOT, "build", "music.wav"), m[: len(out)])
     if has_voice:
         os.makedirs(os.path.join(ROOT, "output"), exist_ok=True)
-        write_wav(os.path.join(ROOT, "output", "voiceover.wav"), voice[: len(out)])
+        write_wav(os.path.join(ROOT, "output", "voiceover.wav"), voice[: len(out), 0])
     print(f"audio: {len(out) / SR:.2f}s, voice={'yes' if has_voice else 'no'}, peak={peak:.3f}")
 
 

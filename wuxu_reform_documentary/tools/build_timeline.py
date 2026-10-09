@@ -18,9 +18,10 @@ from textnorm import split_subtitle_segments, display_sub, syllables, tts_text, 
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EST_RATE = 5.3          # syllables per second (estimate only)
-GAP_WEAK = 0.16         # pause after a comma-type segment
-GAP_STRONG = 0.36       # pause after a sentence end
-GAP_LINE = 0.10         # extra pause between script lines
+GAP_WEAK = 0.12         # pause after a comma-type segment
+GAP_STRONG = 0.30       # pause after a sentence end
+GAP_LINE = 0.06         # extra pause between script lines
+PAD_SCALE = 0.72        # scales each scene's pre/post padding from script.json
 CHAPTER_LEAD = 0.0
 
 
@@ -46,7 +47,7 @@ def main():
         if sc.get("fixed"):
             dur = sc["fixed"]
         else:
-            cur = start + sc.get("pre", 0.4)
+            cur = start + sc.get("pre", 0.4) * PAD_SCALE
             for li, line in enumerate(sc["lines"]):
                 segs = split_subtitle_segments(line)
                 for si, seg in enumerate(segs):
@@ -71,7 +72,7 @@ def main():
                     last = seg.strip().rstrip("”’》」』")[-1:] or last
                     cur += GAP_STRONG if last in STRONG else GAP_WEAK
                 cur += GAP_LINE
-            dur = (cur - start) + sc.get("post", 0.4)
+            dur = (cur - start) + sc.get("post", 0.4) * PAD_SCALE
         dur = max(dur, sc.get("min", 0))
         scenes.append({
             "id": sc["id"],

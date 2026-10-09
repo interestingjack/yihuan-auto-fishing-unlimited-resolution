@@ -71,7 +71,7 @@
   {
    "id": "S04_title",
    "chapter": 1,
-   "fixed": 7.0,
+   "fixed": 6.6,
    "lines": []
   },
   {
@@ -332,7 +332,7 @@
   {
    "id": "S32_credits",
    "chapter": 7,
-   "fixed": 11.0,
+   "fixed": 9.5,
    "lines": []
   }
  ]
